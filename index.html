@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CricketLens · Cricketer face identification</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="shell">
+
+  <aside class="sheet" aria-label="Squad on file">
+    <div class="brand">
+      <span class="ball" aria-hidden="true"></span>
+      <div>
+        <h1>CricketLens</h1>
+        <p>Who's in the photo?</p>
+      </div>
+    </div>
+
+    <details class="addbox">
+      <summary>Add a player</summary>
+      <input id="add-name" list="names" placeholder="Full name" autocomplete="off">
+      <input id="add-files" type="file" accept="image/*" multiple>
+      <p class="hint">3 to 10 clear photos work well. Works for new players and for adding more photos to existing ones.</p>
+      <button id="add-go" class="btn">Add to squad</button>
+      <p id="add-msg" class="add-msg" role="status"></p>
+    </details>
+    <datalist id="names"></datalist>
+
+    <section id="inphoto" class="inphoto" hidden aria-live="polite">
+      <h2 class="sheet-title">In this photo</h2>
+      <ul id="inphoto-list" class="inlist"></ul>
+    </section>
+
+    <details class="squad">
+      <summary id="squad-sum">Squad on file</summary>
+      <input id="find" class="find" placeholder="Filter players" aria-label="Filter players">
+      <ul id="roster" class="roster"></ul>
+    </details>
+
+    <p id="sheet-foot" class="sheet-foot"></p>
+  </aside>
+
+  <main class="main">
+    <nav class="tabs" role="tablist" aria-label="Views">
+      <button role="tab" id="tab-identify" aria-selected="true" aria-controls="view-identify">Identify</button>
+      <button role="tab" id="tab-report" aria-selected="false" aria-controls="view-report">Model report</button>
+    </nav>
+
+    <!-- IDENTIFY -->
+    <section id="view-identify" role="tabpanel" aria-labelledby="tab-identify">
+      <div id="untrained" class="notice" hidden>
+        <strong>No players yet.</strong>
+        Open <em>Add a player</em> in the sidebar, or run <code>python fetch_cricketers.py</code> then <code>python build_gallery.py</code> and refresh.
+      </div>
+
+      <div id="drop" class="drop" tabindex="0" role="button" aria-label="Upload a photo">
+        <input id="file" type="file" accept="image/*" hidden>
+        <div class="drop-inner">
+          <p class="drop-title">Drop a photo here</p>
+          <p class="drop-sub">or click to choose one. Group photos work too: every face gets its own name.</p>
+        </div>
+      </div>
+
+      <div id="stage" class="stage" hidden>
+        <figure class="photo">
+          <div class="photo-wrap" id="photo-wrap">
+            <img id="preview" alt="Uploaded photo with detected faces outlined">
+            <div id="scan" class="scan" hidden></div>
+          </div>
+          <figcaption>
+            <button id="again" class="link">Try another photo</button>
+          </figcaption>
+        </figure>
+
+        <div class="results">
+          <div class="threshold">
+            <label for="thr">Name a player only when the match is at least <output id="thr-out">50%</output> matched</label>
+            <input id="thr" type="range" min="20" max="95" value="50">
+          </div>
+          <div id="status" class="status" role="status" aria-live="polite"></div>
+          <div id="faces" class="faces"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPORT -->
+    <section id="view-report" role="tabpanel" aria-labelledby="tab-report" hidden>
+      <div id="report"></div>
+    </section>
+  </main>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>

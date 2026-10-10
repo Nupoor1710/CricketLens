@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+.snapshots/
+models/*.npz
+models/*.joblib
+models/metrics.json
+dataset/*/
+!dataset/README.md
